@@ -4,8 +4,7 @@ const request = axios.create({
     withCredentials: true,
 });
 
-//export const BASE_API = process.env.REACT_APP_BASE_API_URL;
-export const BASE_API = "http://localhost:4000";
+export const BASE_API = process.env.REACT_APP_BASE_API_URL;
 export const REVIEW_API = `${BASE_API}/api/reviews`;
 export const REVIEWBOOK_API = `${BASE_API}/api/reviewbooks`;
 
