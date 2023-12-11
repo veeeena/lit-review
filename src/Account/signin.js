@@ -30,7 +30,7 @@ function Signin() {
             <div className="body row d-flex align-items-center justify-content-center"
                 style={{backgroundColor: '#fcf3f2', height: '100vh'}}>
                 <div className="col-6">
-                    <h2 className="text-center" style={{fontWeight: "normal"}}>welcome back!</h2>
+                    <h2 className="text-center" style={{fontWeight: "normal"}}>welcome back</h2>
                     {error && <div className="alert p-2 mt-3" style={{backgroundColor: '#fc668e'}}><p className="ms-2 my-0 lh-sm">{error}</p></div>}
                     <div>
                         <input type="text" className="form-control my-2" placeholder="username" value={credentials.username} onChange={(e) => setCredentials({...credentials, username: e.target.value})}/>
@@ -43,7 +43,7 @@ function Signin() {
                     </div>
                     <div>
                         <p className="text-center mt-4 mb-1">
-                            new to reviewing?
+                            <i>new to lit review?</i>
                         </p>
                         <div className="text-center">
                             <button className="btn text-light" style={{backgroundColor: '#FFC8D3'}} onClick={signup}> sign up </button>
