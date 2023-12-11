@@ -34,6 +34,8 @@ function Profile() {
       }
     }, []);
 
+    console.log(account, current);
+
     const signin = async () => {
         navigate("/signin");
     }
@@ -42,10 +44,11 @@ function Profile() {
     }
 
     const contents = (role) => {
+        console.log(role);
         if (role === 'READER') {
-            return <Reviews account={account} id={id}/>
+            return <Reviews curr={current} account={account} id={id}/>
         } else if (role === 'AUTHOR') {
-            return <MyBooks account={account} id={id}/>
+            return <MyBooks curr={current} account={account} id={id}/>
         } else {
             return (
             <div className="mt-4">

@@ -133,7 +133,12 @@ function Book() {
                     <div className="col-6">
                         <div className="mt-4">
                             <h2 className="ms-3 mb-1 pt-2" style={{fontWeight: "normal"}}>{book.title} ({new Date(book.year).getFullYear()})</h2>
-                            <h4 className="ms-3 mt-0 mb-1" style={{fontWeight: "normal"}}> <i>by {author}</i></h4>
+                            <Link
+                                to={`/profile/${book.author}`}
+                                style={{color: '#FFC8D3', textDecoration: 'none'}}
+                            >
+                               <h4 className="ms-3 mt-0 mb-1" style={{fontWeight: "normal"}}> <i>by {author}</i></h4>
+                            </Link>
                             <p className="ms-3 my-3" style={{textAlign: "justify"}}> {book.synopsis} </p>
                         </div>
                     </div>

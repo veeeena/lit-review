@@ -13,6 +13,7 @@ function ExternalBook(props) {
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState(null);
     const [author, setAuthor] = useState(null);
+    const [publisher, setPublisher] = useState(null);
     const [error, setError] = useState(null);
     const [account, setAccount] = useState(null);
     
@@ -29,7 +30,30 @@ function ExternalBook(props) {
       const authorKey = a["key"]
       const authorName = await getAuthorName(authorKey);
       await findReviewsForBook(id, b, authorName)
+      await findPublisherInfo(b)
     };
+
+    const findPublisherInfo = async (b) => {
+        if (b) {
+            const p = await client.getPublishInfo(b["title"]);
+            if (p.length !== 0) {
+                const pls = p.filter((doc) => {
+                    return doc["title"].toString().toLowerCase() === b["title"].toString().toLowerCase();
+                })
+                if (pls.length !== 0) {
+                    let pub = p[0]["publisher"];
+                    if (Array.isArray(pub) && pub.length > 0) {
+                        pub = pub[0]
+                    } else {
+                        pub = null;
+                    }
+                    setPublisher(pub);
+                }
+            }    
+        }
+    }
+
+    console.log(publisher);
     
     const rbb = async (rbId) => {
         const revs = await reviewsClient.findReviewsByBook(rbId);
@@ -102,6 +126,13 @@ function ExternalBook(props) {
         }
     };
 
+    const publisherTransform = (pub) => {
+        if (pub) {
+            const pub2 = pub.replace(/[^A-Z0-9]+/ig, "+");;
+            return pub2;    
+        }
+    }
+
     const icon = (recommended) => {
         if (recommended) {
             return <IoHeartOutline className="mb-1"/>
@@ -128,6 +159,13 @@ function ExternalBook(props) {
                             <h2 className="ms-3 mb-1 pt-2" style={{fontWeight: "normal"}}>{book["title"]}</h2>
                             <h4 className="ms-3 mt-0 mb-1" style={{fontWeight: "normal"}}> <i>by {author}</i></h4>
                             <p className="ms-3 my-3" style={{textAlign: "justify"}}> {standardizeDescription(book["description"])} </p>
+                            {publisher && (
+                                <p className="ms-3 my-3"> published by&nbsp;
+                                    <Link to={`../publisher/${publisherTransform(publisher)}`} style={{textDecoration: "none", color: "black"}}>
+                                        <span style={{color: "#FFC8D3"}}>{publisher.toLowerCase()}</span>
+                                    </Link>
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div className="col-6">

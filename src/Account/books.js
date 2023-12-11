@@ -6,7 +6,7 @@ import * as client from "../Books/client.js"
 import * as reviewsClient from "../Reviews/client.js"
 import { Link } from "react-router-dom";
 
-function MyBooks({account, id}) {
+function MyBooks({curr, account, id}) {
     const [books, setBooks] = useState([]);
     const [book, setBook] = useState(null);
     const [error, setError] = useState(null);
@@ -14,7 +14,8 @@ function MyBooks({account, id}) {
     const navigate = useNavigate();
 
     const getBooksForUser = async () => {
-        if (account._id == id) {
+        if (curr._id == id) {
+            console.log(curr._id, id)
             navigate("../profile")
         }
         const b = await client.findBooksByAuthor(account._id)

@@ -4,6 +4,7 @@ import Navigation from "../Navigation";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Result from "./result.js"
+import UserResult from "./user-result.js"
 import "../Account/profile.css"
 
 function Search() {
@@ -27,9 +28,17 @@ function Search() {
         }
      }, [term]);
 
-     const contents = (key, year, name, title) => {
+     const contents = (key, name, title) => {
+      let transformName = name;
+      if (name instanceof String || typeof(name) === 'string') {
+        // do nothing
+      } else {
+          if (Array.isArray(name) && name.length > 0) {
+            transformName = name[0]
+          }
+      }
         if (key != "undefined") {
-          return <Result resultInfoKey={key} resultBookYear={year} resultAuthorName={name} resultTitle={title}/>
+          return <Result resultInfoKey={key} resultAuthorName={transformName} resultTitle={title}/>
         }
      }
 
@@ -48,14 +57,19 @@ function Search() {
               <ul className="list-group list-group-flush mb-4 ms-4">
                 {userResults && userResults.map((res)=> (
                   <li className="list-group-item mt-3">
-                      hi
+                    <UserResult
+                      userResId={res._id}
+                      userResTitle={res.title}
+                      userResAuthor={res.author}
+                      userResSynopsis={res.synopsis}
+                    />
                   </li>
                 ))}
                 {results && results.map((res) => (
                   <li className="list-group-item mt-3">
                     {res.key && (
                       <div>
-                        {contents(res.key, res["first_publish_year"], res["author_name"], res["title"])}
+                        {contents(res.key, res["author_name"], res["title"])}
                       </div>
                     )}
                   </li>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function Result(props) {
-    const { resultInfoKey, resultBookYear, resultAuthorName, resultTitle } = props;
+    const { resultInfoKey, resultAuthorName, resultTitle } = props;
     const [result, setResult] = useState(null)  
     const getResult = async (k) => {
         try {
@@ -38,7 +38,7 @@ function Result(props) {
                 to={`/books/${getRoute(resultInfoKey)}`}
                 style={{color: '#FFC8D3', textDecoration: 'none'}}
             >                            
-                <h5 className="mt-2" style={{fontWeight: "normal"}}> {resultTitle} ({resultBookYear})</h5>
+                <h5 className="mt-2" style={{fontWeight: "normal"}}> {resultTitle}</h5>
             </Link>
             <p> <i> by {resultAuthorName} </i></p>
             <div className="mb-2">

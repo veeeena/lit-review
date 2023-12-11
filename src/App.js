@@ -4,6 +4,7 @@ import Signup from "./Account/signup.js";
 import Account from "./Account";
 import Profile from "./Account/profile.js";
 import Book from "./Books/book.js"
+import Publisher from "./Publisher"
 import Search from "./Search"
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route, Navigate } from "react-router";
@@ -21,6 +22,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="books" element={<Book />} />
           <Route path="books/:id" element={<Book />} />
+          <Route path="publisher/:id" element={<Publisher />} />
           <Route path="/search/:term" element={<Search />} />
         </Routes>
       </div>

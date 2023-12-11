@@ -7,11 +7,16 @@ import "./profile.css"
 import * as client from "../Reviews/client.js";
 import { Link } from "react-router-dom";
 
-function Reviews({account, id}) {
+function Reviews({curr, account, id}) {
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState(null);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     const getReviewsForUser = async (accountId) => {
+        if (curr._id == id) {
+            console.log(curr._id, id)
+            navigate("../profile")
+        }
         const revs = await client.findReviewsByReader(accountId);
         setReviews(revs);
     }
