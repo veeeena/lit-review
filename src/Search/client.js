@@ -18,4 +18,10 @@ export const getBookInfo = async (key) => {
     return res.data;
 }
 
+export const getAuthorInfo = async (key) => {
+    const res = await axios.get(
+        `${LIBRARY_API}/${key}.json`
+    )
+    return res.data;
+}
 

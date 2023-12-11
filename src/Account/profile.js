@@ -21,7 +21,7 @@ function Profile() {
       setAccount(user);
       setCurrent(curr);
       if (user && curr && user._id == curr._id) {
-        navigate("/profile")
+        navigate("/profile", { replace: true })
       }
     };
     useEffect(() => {

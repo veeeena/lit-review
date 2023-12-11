@@ -23,7 +23,7 @@ function MyBooks({account, id}) {
     }
     useEffect(() => {
           getBooksForUser(account._id);
-      }, [books]);
+      }, []);
 
     const createBook = async () => {
         let newBook = {...book, author: account._id}
@@ -89,7 +89,7 @@ function MyBooks({account, id}) {
                             {error && <div className="alert p-2 mt-3 mx-3 mb-1" style={{backgroundColor: '#fc668e'}}><p className="ms-2 my-0 lh-sm">{error}</p></div>}
                             <div class="modal-header">
                                 <h3 class="modal-title fs-5" style={{fontWeight: "normal"}} id="bookModalLabel">my new book</h3>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" />
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" onClick={(e) => setError(null)}/>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-1">
@@ -106,7 +106,7 @@ function MyBooks({account, id}) {
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-dismiss="modal">close</button>
+                                <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-dismiss="modal" onClick={(e) => setError(null)}>close</button>
                                 <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} onClick={createBook}>publish</button>
                             </div>
                         </div>
@@ -146,7 +146,7 @@ function MyBooks({account, id}) {
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h3 style={{fontWeight: "normal"}}class="modal-title fs-5" id="editModalLabel">edit book</h3>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" />
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onClick={(e) => setError(null)} />
                                             </div>
                                             <div class="modal-body">
                                                 <div class="mb-1">
@@ -164,7 +164,7 @@ function MyBooks({account, id}) {
                                             </div>
                                             {error && <div className="alert p-2 mt-0 mx-3 mb-2" style={{backgroundColor: '#fc668e'}}><p className="ms-2 my-0 lh-sm">{error}</p></div>}
                                             <div class="modal-footer">
-                                                <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-dismiss="modal">close</button>
+                                                <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-dismiss="modal" onClick={(e) => setError(null)}>close</button>
                                                 <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} onClick={updateBook}>publish changes</button>
                                             </div>
                                         </div>

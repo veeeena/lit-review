@@ -6,8 +6,12 @@ function Result(props) {
     const { resultInfoKey, resultBookYear, resultAuthorName, resultTitle } = props;
     const [result, setResult] = useState(null)  
     const getResult = async (k) => {
-      const res = await client.getBookInfo(k);
-      setResult(res);
+        try {
+            const res = await client.getBookInfo(k);
+            setResult(res);      
+        } catch (err) {
+            setResult(null);
+        }
     }
      useEffect(() => {
         if (!result) {
@@ -23,10 +27,15 @@ function Result(props) {
         }
     }
 
+    const getRoute = (url) => {
+        const newRoute = url.replace(/\//g, '');
+        return newRoute;
+    }
+
     return (
         <div className="">
             <Link
-                to={`/books/${resultInfoKey}`}
+                to={`/books/${getRoute(resultInfoKey)}`}
                 style={{color: '#FFC8D3', textDecoration: 'none'}}
             >                            
                 <h5 className="mt-2" style={{fontWeight: "normal"}}> {resultTitle} ({resultBookYear})</h5>

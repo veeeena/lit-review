@@ -1,16 +1,15 @@
 import { IoHeartOutline, IoHeartDislikeOutline } from "react-icons/io5";
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import * as client from "./client";
-import * as reviewsClient from "../Reviews/client";
-import * as usersClient from "../Account/client";
+import { Link } from "react-router-dom";
+import * as client from "../Search/client.js";
+import * as reviewsClient from "../Reviews/client.js";
+import * as usersClient from "../Account/client.js";
 import Navigation from "../Navigation";
-import ExternalBook from "./extbook.js";
 
-function Book() {
-    const { id } = useParams();
+function ExternalBook(props) {
+    const { apiBookKey } = props;
     const [book, setBook] = useState(null);
-    const [reviewBook, setReviewBook] = useState([]);
+    const [reviewBook, setReviewBook] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState(null);
     const [author, setAuthor] = useState(null);
@@ -22,11 +21,14 @@ function Book() {
       setAccount(acc);
     };
 
-    const findBookById = async (id) => {
-      const b = await client.findBookById(id);
+    const findBookInfo = async (id) => {
+      const b = await client.getBookInfo(id);
       setBook(b);
-      const authorName = await getAuthorName(b.author);
-      await findReviewsForBook(b._id, b, authorName)
+      const authors = b["authors"][0]
+      const a = authors["author"]
+      const authorKey = a["key"]
+      const authorName = await getAuthorName(authorKey);
+      await findReviewsForBook(id, b, authorName)
     };
     
     const rbb = async (rbId) => {
@@ -34,54 +36,44 @@ function Book() {
         return revs;
     }
 
-    const findReviewsForBook = async (bk, b, a) => {
-        if (b) {
-            const rb = await reviewsClient.findReviewBooksByBookKey(b._id);
+    const findReviewsForBook = async (bk, b, an) => {
+        const formatKey = `${bk.replace(/\//g,'')}`;
+        if (bk && an) {
+            const rb = await reviewsClient.findReviewBooksByBookKey(formatKey);
             if (rb.length === 0) {
-                try {
-                const newRb = await reviewsClient.createReviewBook({bookKey: bk, title: b.title, author: a});
+                const newRb = await reviewsClient.createReviewBook({bookKey: formatKey, title: b["title"], author: an});
                 setReviewBook(newRb);
                 return;
-                } catch (err) {
-                    console.log(err);
-                    return;
-                }
             }
             setReviewBook(rb[0]);
     
             const revs = await rbb(rb[0]._id);
-            setReviews(revs);    
+            setReviews(revs);
         }
     };
 
-    const getAuthorName = async (auth) => {
-        const a = await usersClient.findUserById(auth)
-        const first = a.firstName;
-        const last = a.lastName;
-        setAuthor(`${first} ${last}`);
-        return `${first} ${last}`;
+    const getAuthorName = async (authorKey) => {
+        const a = await client.getAuthorInfo(authorKey.replace('/',''))
+        if (a["personal_name"]) {
+            setAuthor(a["personal_name"]);
+            return a["personal_name"];    
+        } else {
+            setAuthor(a["name"]);
+            return a["name"];
+        }
     }
 
     useEffect(() => {
-        if (id.includes("works")) {
-            // do nothing
-        } else {
-            fetchAccount();
-            if (!book || !reviewBook) {
-              findBookById(id);
-            }
+        fetchAccount();
+        if (!book || !reviewBook) {
+            findBookInfo(`/${apiBookKey.replace("works", "works/")}`);
         }
-    }, [book, reviewBook]);
+    }, [reviewBook, book]);
 
     const canCreate = async () => {
         const r = await reviewsClient.findReviewsByReaderAndBook(account._id, reviewBook._id)
         return r.length == 0;
     }
-    
-    if (id.includes("works")) {
-        return <ExternalBook apiBookKey={id}/>
-    }
-  
 
     const createReview = async () => {
         let newReview = {...review, reviewBookId: reviewBook._id, readerId: account._id}
@@ -91,8 +83,8 @@ function Book() {
         if (!newReview.recommended) {
             newReview.recommended = false;
         }
-
         const c = await canCreate()
+        console.log(c);
         if (!c) {
             setError(`you can't review a book you've already reviewed. use 'my reviews' tab to edit your review.`)
             return;
@@ -106,13 +98,9 @@ function Book() {
             ]);
             setReview(null)
         } catch (err) {
-            console.log(err);
             setError(`${err.response.data.message}. try again.`);
         }
     };
-
-    console.log(reviews);
-
 
     const icon = (recommended) => {
         if (recommended) {
@@ -122,31 +110,31 @@ function Book() {
         }
     }
 
+    const standardizeDescription = (d) => {
+        if (d instanceof String || typeof(d) === 'string') {
+            return d;
+        } else {
+            return d.value;
+        }
+    }
+
     return (
         <div className="container-fluid">
             <Navigation />
-            {id && id.includes("works") && (
-                <ExternalBook apiBookKey={id}/>
-            )}
-            {book && !id.includes("works") && (
+            {book && (
                 <div className="row body" style={{backgroundColor: '#fcf3f2', minHeight: '90vh'}}>
                     <div className="col-6">
                         <div className="mt-4">
-                            <h2 className="ms-3 mb-1 pt-2" style={{fontWeight: "normal"}}>{book.title} ({new Date(book.year).getFullYear()})</h2>
+                            <h2 className="ms-3 mb-1 pt-2" style={{fontWeight: "normal"}}>{book["title"]}</h2>
                             <h4 className="ms-3 mt-0 mb-1" style={{fontWeight: "normal"}}> <i>by {author}</i></h4>
-                            <p className="ms-3 my-3" style={{textAlign: "justify"}}> {book.synopsis} </p>
+                            <p className="ms-3 my-3" style={{textAlign: "justify"}}> {standardizeDescription(book["description"])} </p>
                         </div>
                     </div>
                     <div className="col-6">
                       {(!account || !account.role) && (
-                        <div className="d-flex justify-content-center mt-4 mb-0"> sign in or sign up to review 
+                        <div className="d-flex justify-content-center mt-4"> sign in or sign up to review 
                         </div>
-                      )}
-                      {account && account.role === 'AUTHOR' && (
-                        <div className="d-flex justify-content-center mt-4 mb-0"> 
-                          create a reader account to add your review 
-                        </div>                        
-                      )}
+                        )}
                         <ul className="list-group list-group-flush m-4">
                             {account.role === 'READER' && (
                             <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-toggle="modal" data-bs-target="#reviewModal"> 
@@ -156,7 +144,7 @@ function Book() {
                                 <li key={index} className="list-group-item mt-3">
                                     <p className="mt-2"> <strong> {review.title} {icon(review.recommended)} </strong> 
                                         <Link to={`../profile/${review.readerId._id}`} style={{textDecoration: "none"}}>
-                                            <i className="text ms-2" style={{color: "#FFC8D3"}}>by {review.readerId.username.toLowerCase()} </i>
+                                            <i className="text ms-2" style={{color: "#FFC8D3"}}>by {review.readerId.username} </i>
                                         </Link>
                                     </p>
                                     <p> {review.review} </p>
@@ -171,7 +159,7 @@ function Book() {
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h3 class="modal-title fs-5" style={{fontWeight: "normal"}} id="editModalLabel">what do you think?</h3>
-                                                <button onClick={(e) => setError(null)} type="button" class="btn-close" data-bs-dismiss="modal" />
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" onClick={(e) => setError(null)}/>
                                             </div>
                                             <div class="modal-body">
                                                 <div class="mb-1">
@@ -201,4 +189,4 @@ function Book() {
     )
 }
 
-export default Book;
+export default ExternalBook;
