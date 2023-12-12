@@ -52,8 +52,6 @@ function ExternalBook(props) {
             }    
         }
     }
-
-    console.log(publisher);
     
     const rbb = async (rbId) => {
         const revs = await reviewsClient.findReviewsByBook(rbId);
@@ -108,7 +106,6 @@ function ExternalBook(props) {
             newReview.recommended = false;
         }
         const c = await canCreate()
-        console.log(c);
         if (!c) {
             setError(`you can't review a book you've already reviewed. use 'my reviews' tab to edit your review.`)
             return;
@@ -179,7 +176,7 @@ function ExternalBook(props) {
                         </div>                        
                         )}
                         <ul className="list-group list-group-flush m-4">
-                            {account.role === 'READER' && (
+                            {account && account.role === 'READER' && (
                             <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-toggle="modal" data-bs-target="#reviewModal"> 
                                 +  &nbsp; what do you think?
                             </button>)}
