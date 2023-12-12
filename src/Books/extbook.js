@@ -155,7 +155,7 @@ function ExternalBook(props) {
                         <div className="mt-4">
                             <h2 className="ms-3 mb-1 pt-2" style={{fontWeight: "normal"}}>{book["title"]}</h2>
                             <h4 className="ms-3 mt-0 mb-1" style={{fontWeight: "normal"}}> <i>by {author}</i></h4>
-                            <p className="ms-3 my-3" style={{textAlign: "justify"}}> {standardizeDescription(book["description"])} </p>
+                            {description && <><p className="ms-3 my-3" style={{textAlign: "justify"}}> {standardizeDescription(book["description"])} </p></>}
                             {publisher && (
                                 <p className="ms-3 my-3"> published by&nbsp;
                                     <Link to={`../publisher/${publisherTransform(publisher)}`} style={{textDecoration: "none", color: "black"}}>
