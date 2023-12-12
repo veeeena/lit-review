@@ -43,7 +43,7 @@ function Account() {
             <Navigation />
             {account && (
                 <div className="body row d-flex align-items-center justify-content-center" style={{backgroundColor: '#fcf3f2', height:'90vh'}}>
-                    <div className="col-6">
+                    <div className="col-7">
                         <h4 className="mt-3 text-center" style={{fontWeight: "normal"}}>  {account.role.toLowerCase()} account </h4>
                         <div className="input-group my-2">
                             <span class="input-group-text">first name</span>
@@ -77,7 +77,7 @@ function Account() {
                             <button className="btn mt-0 my-1" style={{color: '#FD88A0'}} onClick={save}> update </button>
                         </div>
                         <div className="text-center">
-                            <button className="btn mt-5" style={{backgroundColor: '#FFC8D3'}} onClick={signout}> sign out </button>
+                            <button className="btn mt-5" style={{backgroundColor: '#FFC8D3', color: "white"}} onClick={signout}> sign out </button>
                         </div>
                     </div>
                 </div>
