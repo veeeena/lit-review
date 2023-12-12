@@ -153,7 +153,7 @@ function Book() {
                         </div>                        
                       )}
                         <ul className="list-group list-group-flush m-4">
-                            {account.role === 'READER' && (
+                            {account && account.role === 'READER' && (
                             <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-toggle="modal" data-bs-target="#reviewModal"> 
                                 +  &nbsp; what do you think?
                             </button>)}
