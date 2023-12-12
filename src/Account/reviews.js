@@ -7,13 +7,14 @@ import "./profile.css"
 import * as client from "../Reviews/client.js";
 import { Link } from "react-router-dom";
 
-function Reviews({curr, account, id}) {
+function Reviews(props) {
+    const {curr, account, id} = props;
     const [reviews, setReviews] = useState([]);
     const [review, setReview] = useState(null);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const getReviewsForUser = async (accountId) => {
-        if (curr._id == id) {
+        if (curr && curr._id == id) {
             console.log(curr._id, id)
             navigate("../profile")
         }

@@ -15,7 +15,7 @@ function Signin() {
         }
         try {
             await client.signin(credentials);
-            navigate("/profile"); 
+            navigate("/"); 
         } catch (err) {
             setError(`${err.response.data.message}. try again.`);
         }

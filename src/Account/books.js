@@ -14,7 +14,7 @@ function MyBooks({curr, account, id}) {
     const navigate = useNavigate();
 
     const getBooksForUser = async () => {
-        if (curr._id == id) {
+        if (curr && curr._id == id) {
             console.log(curr._id, id)
             navigate("../profile")
         }

@@ -173,6 +173,11 @@ function ExternalBook(props) {
                         <div className="d-flex justify-content-center mt-4"> sign in or sign up to review 
                         </div>
                         )}
+                        {account && account.role === 'AUTHOR' && (
+                        <div className="d-flex justify-content-center mt-4 mb-0"> 
+                          create a reader account to add your review 
+                        </div>                        
+                        )}
                         <ul className="list-group list-group-flush m-4">
                             {account.role === 'READER' && (
                             <button type="button" className="btn text-light" style={{backgroundColor: '#FFC8D3'}} data-bs-toggle="modal" data-bs-target="#reviewModal"> 

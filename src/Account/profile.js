@@ -44,7 +44,6 @@ function Profile() {
     }
 
     const contents = (role) => {
-        console.log(role);
         if (role === 'READER') {
             return <Reviews curr={current} account={account} id={id}/>
         } else if (role === 'AUTHOR') {
