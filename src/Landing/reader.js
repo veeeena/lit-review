@@ -37,7 +37,7 @@ function Reader(props) {
                 {reviews && (
                     <ul className="list-group list-group-flush mx-5 mb-4">
                         {reviews.map((r, index) => (
-                            <li key={index} className="list-group-item mt-3 mx-5">
+                            <li key={index} className="list-group-item mt-3">
                                 <Link to={`/books/${r.reviewBookId.bookKey}`} style={{color: '#FFC8D3', textDecoration: 'none'}}>
                                     <h5 className="d-flex justify-content-center my-2" style={{fontWeight: "normal"}}> {r.reviewBookId.title} <i>&nbsp;by {r.reviewBookId.author}</i></h5>
                                 </Link>                            
