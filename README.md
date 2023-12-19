@@ -3,7 +3,7 @@ This project is a platform for readers and authors to share their insights and w
 
 The application supports CRUD operations for users, books, and reviews. There are two types of end users, readers and authors, with different CRUD abilities. It also makes use of the [Open Library API](https://openlibrary.org/developers/api) to get information about and allow users to make reviews for books not created by users. 
 
-The website's frontend is also hosted on [Netlify](https://main--endearing-brioche-ccf704.netlify.app/).
+The website's frontend is hosted on [Netlify](https://main--endearing-brioche-ccf704.netlify.app/).
 
 ## Installation
 ```bash
